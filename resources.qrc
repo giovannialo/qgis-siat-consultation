@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/siat_consultation" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>

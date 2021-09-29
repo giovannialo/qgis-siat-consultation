@@ -1,0 +1,47 @@
+# This file contains metadata for your plugin.
+
+# This file should be included when you package your plugin.# Mandatory items:
+
+[general]
+name=Siat Consultation
+qgisMinimumVersion=3.0
+description=Query the data of a batch in Siat.
+version=1.0
+author=Giovanni Alves de Lima Oliveira
+email=giovanni.al.oliveira@gmail.com
+
+about=This plugin consults the data of a batch in the Siat system through its web service and displays it on screen, if it exists.
+
+tracker=https://github.com/giovannialo/qgis-siat-consultation/issues
+repository=https://github.com/giovannialo/qgis-siat-consultation
+# End of mandatory metadata
+
+# Recommended items:
+
+hasProcessingProvider=no
+# Uncomment the following line and add your changelog:
+# changelog=
+
+# Tags are comma separated with spaces allowed
+tags=python
+
+homepage=https://github.com/giovannialo/qgis-siat-consultation
+category=Plugins
+icon=icon.png
+# experimental flag
+experimental=False
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False
+
+# Since QGIS 3.8, a comma separated list of plugins to be installed
+# (or upgraded) can be specified.
+# Check the documentation for more information.
+# plugin_dependencies=
+
+Category of the plugin: Raster, Vector, Database or Web
+# category=
+
+# If the plugin can run on QGIS Server.
+server=False
+
