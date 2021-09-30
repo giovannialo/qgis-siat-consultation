@@ -237,4 +237,17 @@ class SiatConsultation:
         self.showData()
 
     def showData(self):
+        fields = ['inscricaoImobiliaria', 'inscricaoCartografica', 'inscricaoAnterior', 'situacao', 'taxacao']
+
+        for field in fields:
+            if field == 'situacao':
+                text = 'Ativo' if self.allotment.get(field) == 'A' else 'Inativo'
+            elif field == 'taxacao':
+                types = {'1': 'Condominio', '2': 'Tributável', '3': 'Tributável isento', '4': 'Destinacao', '5': 'Tribut. rural', '6': 'Isento IPTU', '7': 'Isento IPTU + TSU', '8': 'Isento TSU', '9': 'Imune', '10': 'Remembrado', '11': 'Caucionado', '12': 'Isento IPTU + TSU', '13': 'Instituição cultural', '14': 'Isento c/ dest.', '15': 'Imóveis cedidos', '16': 'Aposentado', '17': 'Ex-combatentes', '18': 'Deficiente fisi.', '19': 'Isento TSU', '20': 'Normal', '21': 'Entidades', '22': 'Remembramento', '23': 'Trib. rural', '24': 'Zep-2', '25': 'Patr. municipal', '26': 'Caucionado', '27': 'Coleta/Transporte', '28': 'Destinacao', '29': 'Limitacao area', '30': 'Erro/Duplicidade', '31': 'Instit. cultural', '32': 'Patr. estadual', '33': 'Patr. federal', '34': 'Isento c/ dest.', '35': 'Ent s/ fins luc', '36': 'Par', '37': 'Fração ideal', '38': 'IPTU decisão judicial', '39': 'TSU decisão judicial', '40': 'Incentivo jaraguá'}
+                text = types.get(self.allotment.get(field))
+            else:
+                text = self.allotment.get(field)
+
+            eval(f'self.dlg.label{field[0].upper() + field[1:]}.setText("{text.upper()}")')
+
         print('showData', self.allotment)
