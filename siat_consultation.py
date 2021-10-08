@@ -167,8 +167,8 @@ class SiatConsultation:
             self.first_start = False
             self.dlg = SiatConsultationDialog()
 
-        self.allotment = None
-        self.allotments = []
+        self.property = None
+        self.properties = []
 
         # Get selected feature
         feature = self.getSelectedFeature()
@@ -182,17 +182,20 @@ class SiatConsultation:
 
         self.dlg.show()
 
-        if self.allotment is not None:
-            self.showData()
+        if self.property is not None:
+            self.show()
             return
 
         self.dlg.comboBox.clear()
         self.dlg.comboBox.addItem('Selecione uma unidade', None)
 
-        for allotment in self.allotments:
+        for allotment in self.properties:
             self.dlg.comboBox.addItem(allotment.get('inscricaoAnterior'), allotment)
 
         self.dlg.comboBox.currentTextChanged.connect(self.onComboBoxChanged)
+
+        if not self.dlg.exec_():
+            pass  # self.resetLabels()
 
     def getSelectedFeature(self):
         canvas = self.iface.mapCanvas()
@@ -202,7 +205,7 @@ class SiatConsultation:
 
     def findAllotment(self, feature):
         url = 'http://192.168.10.7:8080/dsf_mcz_gtm/services/WebServiceGTM'
-        xml = f'<?xml version="1.0" encoding="UTF-8"?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:WebServiceGTM"><soapenv:Header/><soapenv:Body><urn:consultaImovel><entradaConsultaImovelXML><![CDATA[<Entrada><EntradaConsultaImovel><consumidorServico>WS</consumidorServico><inscricaoCartografica>{feature["geo_key"]}</inscricaoCartografica><inscricaoImobiliaria></inscricaoImobiliaria><possuiSaidaProprietario>S</possuiSaidaProprietario><possuiSaidaCompromissario>N</possuiSaidaCompromissario><possuiSaidaEndCompromissario>N</possuiSaidaEndCompromissario><possuiSaidaEndEntImovel>N</possuiSaidaEndEntImovel><possuiSaidaEndLocImovel>N</possuiSaidaEndLocImovel><possuiSaidaEndProprietario>N</possuiSaidaEndProprietario><possuiSaidaEnquadramento>N</possuiSaidaEnquadramento><possuiSaidaBeneficioFiscal>N</possuiSaidaBeneficioFiscal><possuiSaidaTestadaVinculada>N</possuiSaidaTestadaVinculada><possuiSaidaUnidadeAvalicao>N</possuiSaidaUnidadeAvalicao><possuiSaidaZoneamento>N</possuiSaidaZoneamento><possuiValorVenalImovel>N</possuiValorVenalImovel><possuiSaidaEquipamentoUrbano>N</possuiSaidaEquipamentoUrbano><possuiSaidaFichaCadastral>N</possuiSaidaFichaCadastral><codigoImovel></codigoImovel></EntradaConsultaImovel></Entrada>]]></entradaConsultaImovelXML></urn:consultaImovel></soapenv:Body></soapenv:Envelope>'
+        xml = f'<?xml version="1.0" encoding="UTF-8"?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:WebServiceGTM"><soapenv:Header/><soapenv:Body><urn:consultaImovel><entradaConsultaImovelXML><![CDATA[<Entrada><EntradaConsultaImovel><consumidorServico>WS</consumidorServico><inscricaoCartografica>{feature["geo_key"]}</inscricaoCartografica><inscricaoImobiliaria></inscricaoImobiliaria><possuiSaidaProprietario>S</possuiSaidaProprietario><possuiSaidaCompromissario>N</possuiSaidaCompromissario><possuiSaidaEndCompromissario>N</possuiSaidaEndCompromissario><possuiSaidaEndEntImovel>N</possuiSaidaEndEntImovel><possuiSaidaEndLocImovel>S</possuiSaidaEndLocImovel><possuiSaidaEndProprietario>N</possuiSaidaEndProprietario><possuiSaidaEnquadramento>N</possuiSaidaEnquadramento><possuiSaidaBeneficioFiscal>N</possuiSaidaBeneficioFiscal><possuiSaidaTestadaVinculada>S</possuiSaidaTestadaVinculada><possuiSaidaUnidadeAvalicao>N</possuiSaidaUnidadeAvalicao><possuiSaidaZoneamento>N</possuiSaidaZoneamento><possuiValorVenalImovel>N</possuiValorVenalImovel><possuiSaidaEquipamentoUrbano>N</possuiSaidaEquipamentoUrbano><possuiSaidaFichaCadastral>N</possuiSaidaFichaCadastral><codigoImovel></codigoImovel></EntradaConsultaImovel></Entrada>]]></entradaConsultaImovelXML></urn:consultaImovel></soapenv:Body></soapenv:Envelope>'
 
         response = requests.post(url, xml, headers = {'Content-Type': 'Application/xml'})
 
@@ -223,9 +226,9 @@ class SiatConsultation:
             return False
 
         if type(data.get('SaidaImovel')) == list:
-            self.allotments = data.get('SaidaImovel')
+            self.properties = data.get('SaidaImovel')
         else:
-            self.allotment = data.get('SaidaImovel')
+            self.property = data.get('SaidaImovel')
 
         return True
 
@@ -233,21 +236,106 @@ class SiatConsultation:
         if self.dlg.comboBox.itemData(self.dlg.comboBox.currentIndex()) is None:
             return
 
-        self.allotment = self.dlg.comboBox.itemData(self.dlg.comboBox.currentIndex())
-        self.showData()
+        self.property = self.dlg.comboBox.itemData(self.dlg.comboBox.currentIndex())
+        self.show()
 
-    def showData(self):
-        fields = ['inscricaoImobiliaria', 'inscricaoCartografica', 'inscricaoAnterior', 'situacao', 'taxacao']
+    def show(self):
+        self.owner = self.property.get('saidaProprietariosImovel').get('SaidaProprietarioImovel') if self.property.get('saidaProprietariosImovel') is not None else None
+        self.owner_address = self.owner.get('saidaEnderecoProprietario')
+        self.address_location_property = self.property.get('saidaEnderecoLocalizacaoImovel')
+        self.address_delivery_property = self.property.get('saidaEnderecoEntregaImovel')
+        self.allotment = self.property.get('saidaLote')
+        self.tested_linked = self.allotment.get('saidaTestadasVinculadas').get('SaidaTestadaVinculada') if self.allotment.get('saidaTestadasVinculadas') is not None else None
+        self.urban_equipment = self.tested_linked.get('saidaEquipamentoUrbano')
+        self.evaluation_unit = self.property.get('saidaUnidadesAvaliacao').get('SaidaUnidadeAvaliacao') if self.property.get('saidaUnidadesAvaliacao') is not None else None
 
-        for field in fields:
-            if field == 'situacao':
-                text = 'Ativo' if self.allotment.get(field) == 'A' else 'Inativo'
-            elif field == 'taxacao':
-                types = {'1': 'Condominio', '2': 'Tributável', '3': 'Tributável isento', '4': 'Destinacao', '5': 'Tribut. rural', '6': 'Isento IPTU', '7': 'Isento IPTU + TSU', '8': 'Isento TSU', '9': 'Imune', '10': 'Remembrado', '11': 'Caucionado', '12': 'Isento IPTU + TSU', '13': 'Instituição cultural', '14': 'Isento c/ dest.', '15': 'Imóveis cedidos', '16': 'Aposentado', '17': 'Ex-combatentes', '18': 'Deficiente fisi.', '19': 'Isento TSU', '20': 'Normal', '21': 'Entidades', '22': 'Remembramento', '23': 'Trib. rural', '24': 'Zep-2', '25': 'Patr. municipal', '26': 'Caucionado', '27': 'Coleta/Transporte', '28': 'Destinacao', '29': 'Limitacao area', '30': 'Erro/Duplicidade', '31': 'Instit. cultural', '32': 'Patr. estadual', '33': 'Patr. federal', '34': 'Isento c/ dest.', '35': 'Ent s/ fins luc', '36': 'Par', '37': 'Fração ideal', '38': 'IPTU decisão judicial', '39': 'TSU decisão judicial', '40': 'Incentivo jaraguá'}
-                text = types.get(self.allotment.get(field))
-            else:
-                text = self.allotment.get(field)
+        self.showCadastralReference()
+        self.showCommitee()
+        self.showPropertyLocation()
 
-            eval(f'self.dlg.label{field[0].upper() + field[1:]}.setText("{text.upper()}")')
+    def showCadastralReference(self):
+        self.dlg.labelInscricaoImobiliaria.setText(self.property.get('inscricaoImobiliaria').strip())
+        self.dlg.labelInscricaoCartografica.setText(self.property.get('inscricaoCartografica').strip())
+        self.dlg.labelInscricaoAnterior.setText(self.property.get('inscricaoAnterior').strip())
 
-        print('showData', self.allotment)
+        self.dlg.labelSituacao.setText('ATIVO' if self.property.get('situacao') == 'A' else 'INATIVO')
+
+        taxation = {'1': 'CONDOMÍNIO', '2': 'TRIBUTÁVEL', '3': 'TRIBUTÁVEL ISENTO', '4': 'DESTINAÇÃO', '5': 'TRIBUT. RURAL', '6': 'ISENTO IPTU', '7': 'ISENTO IPTU + TSU', '8': 'ISENTO TSU', '9': 'IMUNE', '10': 'REMEMBRADO', '11': 'CAUCIONADO', '12': 'ISENTO IPTU + TSU', '13': 'INSTITUIÇÃO CULTURAL', '14': 'ISENTO C/ DEST.', '15': 'IMÓVEIS CEDIDOS', '16': 'APOSENTADO', '17': 'EX-COMBATENTES', '18': 'DEFICIENTE FÍSICO', '19': 'ISENTO TSU', '20': 'NORMAL', '21': 'ENTIDADES', '22': 'REMEMBRAMENTO', '23': 'TRIB. RURAL', '24': 'ZEP-2', '25': 'PATRIMÔNIO MUNICIPAL', '26': 'CAUCIONADO', '27': 'COLETA/TRANSPORTE', '28': 'DESTINAÇÃO', '29': 'LIMITAÇÃO ÁREA', '30': 'ERRO/DUPLICIDADE', '31': 'INSTITUIÇÃO CULTURAL', '32': 'PATRIMÔNIO ESTADUAL', '33': 'PATRIMÔNIO FEDERAL', '34': 'ISENTO C/ DEST.', '35': 'ENT S/ FINS LUC.', '36': 'PAR', '37': 'FRAÇÃO IDEAL', '38': 'IPTU DECISÃO JUDICIAL', '39': 'TSU DECISÃO JUDICIAL', '40': 'INCENTIVO JARAGUÁ'}
+        self.dlg.labelTaxacao.setText(taxation.get(self.property.get('taxacao')))
+
+    def showCommitee(self):
+        self.dlg.labelProprietarioImovelCpfCnpj.setText('{}{}{}.{}{}{}.{}{}{}-{}{}'.format(*self.owner.get('cpfCnpj')) if len(self.owner.get('cpfCnpj')) == 11 else '{}{}.{}{}{}.{}{}{}/{}{}{}{}-{}{}'.format(*self.owner.get('cpfCnpj')))
+        self.dlg.labelProprietarioImovelNomeRazaoSocial.setText(self.owner.get('nomeRazaoSocial').strip())
+
+    def showPropertyLocation(self):
+        self.dlg.labelEnderecoLocalizacaoImovelLogradouro.setText(self.address_location_property.get('logradouro').strip())
+        self.dlg.labelEnderecoLocalizacaoImovelNumero.setText(self.address_location_property.get('numero').strip())
+        self.dlg.labelEnderecoLocalizacaoImovelCep.setText('{}{}.{}{}{}-{}{}{}'.format(*self.address_location_property.get('cep')).strip())
+        self.dlg.labelSaidaLoteQuantidadeFrente.setText(self.allotment.get('quantidadeFrente').strip())
+
+        if self.address_location_property.get('complemento') is not None:
+            complement = ''
+
+            try:
+                block_i = self.address_location_property.get('complemento').index('QUADRA:') + 7
+                block_e = self.address_location_property.get('complemento').index(';', block_i)
+                block = self.address_location_property.get('complemento')[block_i:block_e].strip()
+
+                if block != 'null' and block != self.allotment.get('numeroQuadraLoteamento'):
+                    complement += 'BL ' + block if len(block) > 0 and block != 'null' else ''
+            except ValueError:
+                pass
+
+            try:
+                lot_i = self.address_location_property.get('complemento').index('LOTE:') + 5
+                lot_e = self.address_location_property.get('complemento').index(';', lot_i)
+                lot = self.address_location_property.get('complemento')[lot_i:lot_e].strip()
+
+                if lot != 'null' and lot != self.allotment.get('numeroLoteLoteamento'):
+                    if len(complement) > 0:
+                        complement += '-'
+
+                    complement += 'LT ' + lot if len(lot) > 0 and lot != 'null' else ''
+            except ValueError:
+                pass
+
+            try:
+                apartment_i = self.address_location_property.get('complemento').index('APARTAMENTO:') + 12
+                apartment_e = self.address_location_property.get('complemento').index(';', apartment_i)
+                apartment = self.address_location_property.get('complemento')[apartment_i:apartment_e].strip()
+
+                if len(complement) > 0:
+                    complement += '-'
+
+                complement += 'APT ' + apartment if len(apartment) > 0 and apartment != 'null' else ''
+            except ValueError:
+                pass
+
+            self.dlg.labelEnderecoLocalizacaoImovelComplemento.setText(complement.upper())
+
+            try:
+                allotment_i = self.address_location_property.get('complemento').index('LOTEAMENTO:') + 11
+                allotment_e = self.address_location_property.get('complemento').index(';', allotment_i)
+                allotment = self.address_location_property.get('complemento')[allotment_i:allotment_e].strip()
+
+                self.dlg.labelEnderecoLocalizacaoImovelLoteamento.setText(allotment.upper())
+            except ValueError:
+                pass
+
+            try:
+                condominium_i = self.address_location_property.get('complemento').index('CONDOMINIO:') + 11
+                condominium_e = self.address_location_property.get('complemento').index(';', condominium_i)
+                condominium = self.address_location_property.get('complemento')[condominium_i:condominium_e].strip()
+
+                self.dlg.labelEnderecoLocalizacaoImovelCondominio.setText(condominium.upper())
+            except ValueError:
+                pass
+
+            self.dlg.labelEnderecoLocalizacaoImovelQuadra.setText(self.allotment.get('numeroQuadraLoteamento').strip())
+            self.dlg.labelEnderecoLocalizacaoImovelLote.setText(self.allotment.get('numeroLoteLoteamento').strip())
+            self.dlg.labelEnderecoLocalizacaoImovelBairro.setText(self.address_location_property.get('bairro').strip())
+            self.dlg.labelEnderecoLocalizacaoImovelCidade.setText(self.address_location_property.get('cidade').strip() + '/' + self.address_location_property.get('uf').strip())
+            self.dlg.labelEnderecoLocalizacaoImovelInscricaoFace.setText(self.tested_linked.get('inscricaoFace').strip())
+            self.dlg.labelEnderecoLocalizacaoImovelSituacao.setText('ATIVO' if self.allotment.get('situacao') == 'A' else 'INATIVO')
+            self.dlg.labelEnderecoLocalizacaoImovelMatricula.setText(self.property.get('matricula').strip if self.property.get('matricula') is not None else '---')
+            
