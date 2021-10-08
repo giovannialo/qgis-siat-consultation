@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SiatConsultationDialogBase</class>
+ <widget class="QDialog" name="SiatConsultationDialogBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Siat Consultation</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #121212;</string>
+  </property>
+  <widget class="QWidget" name="verticalLayoutWidgetInscricaoImobiliaria">
+   <property name="geometry">
+    <rect>
+     <x>83</x>
+     <y>50</y>
+     <width>150</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayoutInscricaoImobiliaria">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="label_1">
+      <property name="styleSheet">
+       <string notr="true">
+        padding: 6px 6px 0;
+        font-weight: bold;
+        color: white;
+        background-color: #1e1e1e;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+       </string>
+      </property>
+      <property name="text">
+       <string>INSCRIÇÃO MUNICIPAL</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="labelInscricaoImobiliaria">
+      <property name="styleSheet">
+       <string notr="true">
+        padding: 0 6px 6px;
+        color: #999;
+        background-color: #1e1e1e;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+       </string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidgetInscricaoImobiliaria_2">
+   <property name="geometry">
+    <rect>
+     <x>235</x>
+     <y>50</y>
+     <width>174</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayoutInscricaoCartografica">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="styleSheet">
+       <string notr="true">
+        padding: 6px 6px 0;
+        font-weight: bold;
+        color: white;
+        background-color: #1e1e1e;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+       </string>
+      </property>
+      <property name="text">
+       <string>INSCRIÇÃO CARTOGRÁFICA</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="labelInscricaoCartografica">
+      <property name="styleSheet">
+       <string notr="true">
+        padding: 0 6px 6px;
+        color: #999;
+        background-color: #1e1e1e;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+       </string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidgetInscricaoImobiliaria_3">
+   <property name="geometry">
+    <rect>
+     <x>411</x>
+     <y>50</y>
+     <width>194</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayoutInscricaoAnterior">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="label_3">
+      <property name="styleSheet">
+       <string notr="true">
+        padding: 6px 6px 0;
+        font-weight: bold;
+        color: white;
+        background-color: #1e1e1e;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+       </string>
+      </property>
+      <property name="text">
+       <string>INSCRIÇÃO ANTERIOR/ORIGEM</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="labelInscricaoAnterior">
+      <property name="styleSheet">
+       <string notr="true">
+        padding: 0 6px 6px;
+        color: #999;
+        background-color: #1e1e1e;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+       </string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidgetInscricaoImobiliaria_4">
+   <property name="geometry">
+    <rect>
+     <x>607</x>
+     <y>50</y>
+     <width>151</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayoutSituacao">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="label_4">
+      <property name="styleSheet">
+       <string notr="true">
+        padding: 6px 6px 0;
+        font-weight: bold;
+        color: white;
+        background-color: #1e1e1e;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+       </string>
+      </property>
+      <property name="text">
+       <string>SITUAÇÃO CADASTRAL</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="labelSituacao">
+      <property name="styleSheet">
+       <string notr="true">
+        padding: 0 6px 6px;
+        color: #999;
+        background-color: #1e1e1e;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+       </string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidgetInscricaoImobiliaria_5">
+   <property name="geometry">
+    <rect>
+     <x>760</x>
+     <y>50</y>
+     <width>156</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayoutTaxacao">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QLabel" name="label_5">
+      <property name="styleSheet">
+       <string notr="true">
+        padding: 6px 6px 0;
+        font-weight: bold;
+        color: white;
+        background-color: #1e1e1e;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+       </string>
+      </property>
+      <property name="text">
+       <string>SITUAÇÃO LANÇAMENTO</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="labelTaxacao">
+      <property name="styleSheet">
+       <string notr="true">
+        padding: 0 6px 6px;
+        color: #999;
+        background-color: #1e1e1e;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+       </string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
