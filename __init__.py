@@ -24,6 +24,37 @@
 """
 
 
+def installDependency():
+    # import sys
+    #
+    # if not 'xmltodict' in sys.modules:
+    #     import os
+    #     from qgis.core import Qgis
+    #
+    #     qgis_version = Qgis().version()
+    #     qgis_version = qgis_version.split('-')
+    #     qgis_version = qgis_version[0].split('.')
+    #     qgis_version = f'{qgis_version[0]}.{qgis_version[1]}'
+    #
+    #     qgis_dir = f'C:\PROGRA~1\QGIS {qgis_version}'
+    #
+    #     if os.path.exists(qgis_dir) and os.path.isdir(qgis_dir):
+    #         python_dir = f'{qgis_dir}\\apps\Python{sys.version_info.major}{sys.version_info.minor}'
+    #
+    #         if os.path.exists(python_dir) and os.path.isdir(python_dir):
+    #             cli = f'cd {python_dir} && python -m pip install xmltodict'
+    #             cli = cli.replace('/', '\\')
+    #             os.system(cli)
+    #     else:
+    #         print('Não foi possível encontrar a pasta de instalação do Qgis!')
+
+    import sys
+
+    if not 'xmltodict' in sys.modules:
+        import subprocess
+        subprocess.check_call(['python', '-m', 'pip', 'install', 'xmltodict'])
+
+
 # noinspection PyPep8Naming
 def classFactory(iface):  # pylint: disable=invalid-name
     """Load SiatConsultation class from file SiatConsultation.
@@ -31,6 +62,22 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :param iface: A QGIS interface instance.
     :type iface: QgsInterface
     """
+
+    # Instala a dependênia do plugin (módulo xmltodict)
+    installDependency()
+
+    # import os
+    # pip_file = os.path.dirname(__file__) + '/get-pip.py'
     #
+    # if os.path.exists(pip_file) and os.path.isfile(pip_file):
+    #     # cli = 'cd C:\Program Files\QGIS 3.4.8\\apps\Python37 && python ' + pip_file + ' && python -m pip install xmltodict'
+    #     cli = 'cd C:\Program Files\QGIS 3.16\\apps\Python37 && python -m pip install xmltodict'
+    #     cli = cli.replace('/', '\\')
+    #     os.system(cli)
+    #
+    #     import sys
+    #     if 'xmltodict' in sys.modules:
+    #         os.remove(pip_file)
+
     from .siat_consultation import SiatConsultation
     return SiatConsultation(iface)
